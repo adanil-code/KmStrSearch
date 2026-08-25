@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{bebbacad-3536-4ded-901b-fd39ae0f20f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Includes">
+      <UniqueIdentifier>{e26cc2c1-522c-44fc-af36-11a93be187de}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="KmStrSearchUm.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\StrSearch\KmStrSearch8.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\StrSearch\KmStrSearch16.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Experimental\KmBndmSearch8.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Experimental\KmBndmSearch16.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\StrSearch\KmStrSearch16.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\StrSearch\KmStrSearch8.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Shared\KmStrSearchShared.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="ntddk.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Experimental\KmBndmSearch16.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Experimental\KmBndmSearch8.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

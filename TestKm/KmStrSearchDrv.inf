@@ -1,0 +1,54 @@
+; KmStrSearchDrv.inf
+; INF file for substring search test kernel-mode driver
+
+[Version]
+Signature           = "$WINDOWS NT$"
+Class               = System
+ClassGuid           = {4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider            = %ManufacturerName%
+DriverVer           = 03/11/2026,1.0.0.0
+CatalogFile         = KmStrSearchDrv.cat
+PnpLockdown         = 1
+
+[DestinationDirs]
+KmStrSearchDrv_CopyFiles  = 12 ; %SystemRoot%\System32\drivers
+
+[SourceDisksNames]
+1                       = %DiskName%,,,
+
+[SourceDisksFiles]
+KmStrSearchDrv.sys        = 1
+
+[Manufacturer]
+%ManufacturerName%  = KmStrSearchDrv_Manufacturer, NTx86, NTamd64, NTarm64
+
+[KmStrSearchDrv_Manufacturer.NTx86]
+%KmStrSearchDrv_DeviceDesc% = KmStrSearchDrv_Install, Root\KmStrSearchDrv
+
+[KmStrSearchDrv_Manufacturer.NTamd64]
+%KmStrSearchDrv_DeviceDesc% = KmStrSearchDrv_Install, Root\KmStrSearchDrv
+
+[KmStrSearchDrv_Manufacturer.NTarm64]
+%KmStrSearchDrv_DeviceDesc% = KmStrSearchDrv_Install, Root\KmStrSearchDrv
+
+[KmStrSearchDrv_Install]
+CopyFiles           = KmStrSearchDrv_CopyFiles
+
+[KmStrSearchDrv_Install.Services]
+AddService          = KmStrSearchDrv, 0x00000002, KmStrSearchDrv_Service_Install
+
+[KmStrSearchDrv_CopyFiles]
+KmStrSearchDrv.sys
+
+[KmStrSearchDrv_Service_Install]
+DisplayName         = %KmStrSearchDrv_ServiceName%
+ServiceType         = 1 ; SERVICE_KERNEL_DRIVER
+StartType           = 3 ; SERVICE_DEMAND_START
+ErrorControl        = 1 ; SERVICE_ERROR_NORMAL
+ServiceBinary       = %12%\KmStrSearchDrv.sys
+
+[Strings]
+ManufacturerName            = "AD"
+KmStrSearchDrv_DeviceDesc  = "Horsepool search test Driver"
+KmStrSearchDrv_ServiceName = "KmStrSearchDrv"
+DiskName                   = "Horsepool search test Driver Installation Disk"
