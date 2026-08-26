@@ -80,9 +80,10 @@ The primary production engines (`CKmStrSearch8` and `CKmStrSearch16`) combine Bo
 * **Memory Slide Mode (< 64 bytes):** Short patterns bypass table lookups entirely to avoid pipeline-stalling memory dependencies, executing a 4x unrolled pure vector slide across the text buffer.
 
 ### 16-Bit Architecture (`CKmStrSearch16`)
+
 UTF-16 characters (`wchar_t`) span a 65,536 value space. A naive BMH table would require 256KB (65536 * 4 bytes), guaranteed to blow out the CPU's L1 Data Cache (typically 32KB–48KB per core), leading to continuous L2/L3 cache misses.
 
-~~~text
+```text
 16-Bit Character (ch) 
         |
         v
@@ -92,13 +93,12 @@ UTF-16 characters (`wchar_t`) span a 65,536 value space. A naive BMH table would
         |
         v
   [ 8KB Table ]        ---> 2,048-entry skip table designed to remain L1-cache resident
-~~~
+```
 
-* **Golden Ratio Multiplicative Hashing:** Characters are hashed into an 11-bit index (2048 entries).
-* **Cache Residency:** The table occupies 8KB (2048 * 4 bytes), keeping the table within a typical L1 D-cache footprint.
+* **Golden Ratio Multiplicative Hashing:** Characters are hashed into an 11-bit index (2048 entries). By folding the sparse 256KB state space into a dense 8KB footprint, the algorithm inherently prevents the cache thrashing that degrades standard wide-character BMH implementations.
+* **Cache Residency & Allocation:** The table occupies 8KB (2048 * 4 bytes), keeping it well within a typical L1 D-cache footprint. To further optimize physical memory mapping, the table is explicitly allocated in the kernel using `POOL_FLAG_CACHE_ALIGNED`. This locks the skip table inside the L1 Data Cache, preserving rapid table lookups without triggering Translation Lookaside Buffer (TLB) invalidation during the continuous memory scanning loop.
 * **Collision Safety:** On bucket collisions, the smallest jump distance is stored. While hash collisions slightly reduce skip aggressiveness, correctness is preserved.
-* **Wide Bifurcation (>= 128 characters):** Because hashing adds arithmetic latency, vector streaming is maintained up to 128 wide characters to maximize sequential throughput.
-
+* **Wide Bifurcation (>= 128 characters):** Since hashing adds arithmetic latency, vector streaming is maintained up to 128 wide characters to maximize sequential throughput.
 ### Repetitive Substring Protection
 To prevent worst-case O(N * M) degradation on highly repetitive streams (e.g., searching for `aaaaab` within `aaaaaaaaaaaaaa...`), the SIMD and SWAR loaders broadcast and check the **last character** of the needle rather than the first. This creates instant mismatch rejections in homogeneous text streams.
 
